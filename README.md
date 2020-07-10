@@ -14,6 +14,7 @@
 - [Install](#install)
 - [How it works](#how-it-works)
 - [Usage](#usage)
+- [Links](#links)
 - [Contributing](#contributing)
 - [Contributors](#contributors)
 - [License](#license)
@@ -87,6 +88,12 @@ const config = {
 ```
 
 仅此而已
+
+[⬆ Back to Top](#table-of-contents)
+
+## Links
+
+- 为何会产生这个插件：https://deepexi.yuque.com/docs/share/a9d2b329-79bd-4728-a660-c3a6a0550b59
 
 [⬆ Back to Top](#table-of-contents)
 
