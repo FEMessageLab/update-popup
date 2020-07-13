@@ -52,11 +52,7 @@ VERSION=1.0.0
 // nuxt.config.js
 const UpdatePopup = require('@femessage/update-popup/nuxt')
 const config = {
-  build: {
-    extend(config) {
-      config.plugins.push(new UpdatePopup())
-    }
-  }
+  modules: ['@femessage/update-popup/nuxt'],
 }
 ```
 
