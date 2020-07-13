@@ -1,10 +1,10 @@
-const VersionChecker = require('.')
+const UpdatePopup = require('.')
 
-class NuxtVersionChecker extends VersionChecker {
+class NuxtUpdatePopup extends UpdatePopup {
   constructor() {
     super()
     this.prefix = '/_nuxt'
   }
 }
 
-module.exports = NuxtVersionChecker
+module.exports = NuxtUpdatePopup

@@ -11,8 +11,8 @@ function main() {
   // 上次访问时间 ms
   let lastSeenMS = 0
 
-  const worker = new Worker('{{prefix}}/worker/version-checker.js', {
-    name: 'worker-versionChecker',
+  const worker = new Worker('{{prefix}}/worker/update-popup.js', {
+    name: 'worker-updatePopup',
   })
 
   let popupFlag = false
@@ -77,7 +77,7 @@ function main() {
     if (newVersion && currentVersion) {
       const n = newVersion.split('.')
       const c = currentVersion.split('.')
-  
+
       for (let i = 0; i <= n.length; i++) {
         if (Number(n[i]) > Number(c[i])) return true
       }

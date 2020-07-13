@@ -1,10 +1,10 @@
-# Version-Checker
+# update-popup
 
-[![Build Status](https://badgen.net/travis/FEMessage/version-checker/master)](https://travis-ci.com/FEMessage/version-checker)
-[![NPM Download](https://badgen.net/npm/dm/@femessage/version-checker)](https://www.npmjs.com/package/@femessage/version-checker)
-[![NPM Version](https://badge.fury.io/js/%40femessage%2Fversion-checker.svg)](https://www.npmjs.com/package/@femessage/version-checker)
-[![NPM License](https://badgen.net/npm/license/@femessage/version-checker)](https://github.com/FEMessage/version-checker/blob/master/LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/FEMessage/version-checker/pulls)
+[![Build Status](https://badgen.net/travis/FEMessage/update-popup/master)](https://travis-ci.com/FEMessage/update-popup)
+[![NPM Download](https://badgen.net/npm/dm/@femessage/update-popup)](https://www.npmjs.com/package/@femessage/update-popup)
+[![NPM Version](https://badge.fury.io/js/%40femessage%2Fupdate-popup.svg)](https://www.npmjs.com/package/@femessage/update-popup)
+[![NPM License](https://badgen.net/npm/license/@femessage/update-popup)](https://github.com/FEMessage/update-popup/blob/master/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/FEMessage/update-popup/pulls)
 [![Automated Release Notes by gren](https://img.shields.io/badge/%F0%9F%A4%96-release%20notes-00B2EE.svg)](https://github-tools.github.io/github-release-notes/)
 
 ## Table of Contents
@@ -48,7 +48,7 @@
 ## Install
 
 ```console
-yarn add @femessage/version-checker
+yarn add @femessage/update-popup
 ```
 
 [⬆ Back to Top](#table-of-contents)
@@ -65,11 +65,11 @@ VERSION=1.0.0
 
 ```js
 // nuxt.config.js
-const VersionChecker = require('@femessage/version-checker/nuxt')
+const UpdatePopup = require('@femessage/update-popup/nuxt')
 const config = {
   build: {
     extend(config) {
-      config.plugins.push(new VersionChecker())
+      config.plugins.push(new UpdatePopup())
     }
   }
 }
@@ -79,10 +79,10 @@ const config = {
 
 ```js
 // vue.config.js
-const VersionChecker = require('@femessage/version-checker')
+const UpdatePopup = require('@femessage/update-popup')
 const config = {
   chainWebpack: config => {
-    config.plugin('version-checker').use(VersionChecker)
+    config.plugin('update-popup').use(UpdatePopup)
   }
 }
 ```

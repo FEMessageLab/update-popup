@@ -12,9 +12,9 @@ const resolveTmp = (...dir) => resolve('.tmp', ...dir)
 
 const {resolveWebpackEntry} = require('./utils')
 
-const NAME = 'femessage-version-checker'
+const NAME = 'femessage-update-popup'
 
-class VersionChecker {
+class UpdatePopup {
   constructor() {
     // 注册 worker 和查询版本号文件路径前缀
     // 由于 nuxt 的构建输出方式略微不同：先生成到 `/.nuxt/dist/client` 再复制到 `/dist/_nuxt`
@@ -49,8 +49,8 @@ class VersionChecker {
       }
 
       const workerFile = {
-        str: replacePrefix(resolve('src', 'worker', 'version-checker.js')),
-        dest: resolveTmp('worker', 'version-checker.js')
+        str: replacePrefix(resolve('src', 'worker', 'update-popup.js')),
+        dest: resolveTmp('worker', 'update-popup.js')
       }
 
       fs.outputFileSync(mainFile.dest, mainFile.str)
@@ -76,4 +76,4 @@ class VersionChecker {
   }
 }
 
-module.exports = VersionChecker
+module.exports = UpdatePopup
