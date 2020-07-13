@@ -12,36 +12,21 @@
 - [Introduction](#introduction)
 - [Features](#features)
 - [Install](#install)
-- [How it works](#how-it-works)
 - [Usage](#usage)
-- [Links](#links)
 - [Contributing](#contributing)
 - [Contributors](#contributors)
 - [License](#license)
 
 ## Introduction
 
-为了促进用户使用最新版本的系统，避免出现已修复的问题。
+为了促进用户使用最新版本的系统，避免出现已修复的问题。  
+阅读[「检测新版本并提醒刷新-方案」](https://deepexi.yuque.com/docs/share/a9d2b329-79bd-4728-a660-c3a6a0550b59)来了解我们为何会产生这个插件。
 
 [⬆ Back to Top](#table-of-contents)
 
 ## Features
 
-检测当前运行的应用是否落后于线上最新版本，是则提醒刷新。
-
-[⬆ Back to Top](#table-of-contents)
-
-## How it works
-
-- 版本号
-  - 构建时将版本号写入代码中，另外生成一个版本号文件 version.txt（用于被查询版本号）。
-    - 当有新版本构建时，这个文件会被新的版本号替换，因此它始终是最新的版本号文件。
-  - 发现版本号比当前应用版本号新时，则提醒「发现新版本可用」。
-- 查询版本号
-  - 进入系统查询 1 此版本号。
-  - 系统正在工作时，每隔 1 小时获取版本号。
-  - 系统不在工作时（切换到其他tab/关闭页面），停止获取版本号。
-  - 系统页面被激活时，会立马查询 1 次版本号，有 10 秒间隔，在间隔内频繁切换状态不会获取版本号。
+检测当前运行的应用是否落后于线上最新版本，是则提醒刷新以使用新版本。
 
 [⬆ Back to Top](#table-of-contents)
 
@@ -88,12 +73,6 @@ const config = {
 ```
 
 仅此而已
-
-[⬆ Back to Top](#table-of-contents)
-
-## Links
-
-- 为何会产生这个插件：https://deepexi.yuque.com/docs/share/a9d2b329-79bd-4728-a660-c3a6a0550b59
 
 [⬆ Back to Top](#table-of-contents)
 
