@@ -7,4 +7,8 @@ class NuxtUpdatePopup extends UpdatePopup {
   }
 }
 
-module.exports = NuxtUpdatePopup
+export default function nuxtUpdatePopup() {
+  this.extendBuild(config => {
+    config.plugins.push(new NuxtUpdatePopup())
+  })
+}
