@@ -26,7 +26,7 @@
 
 ## Features
 
-检测当前运行的应用是否落后于线上最新版本，是则提醒刷新以使用新版本。
+检测当前运行的应用是否是最新版本，如若不是，则提醒刷新以使用新版本。
 
 [⬆ Back to Top](#table-of-contents)
 
@@ -68,7 +68,7 @@ const config = {
 }
 ```
 
-仅此而已
+就这么简单！
 
 [⬆ Back to Top](#table-of-contents)
 
