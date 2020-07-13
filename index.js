@@ -69,8 +69,7 @@ class UpdatePopup {
       // 版本号文件
       fs.outputFileSync(
         path.join(outputPath, 'version.txt'),
-        process.env.VERSION || '',
-        'utf-8'
+        process.env.VERSION || ''
       )
     })
   }
