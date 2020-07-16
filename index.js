@@ -16,6 +16,14 @@ const {resolveWebpackEntry} = require('./utils')
 const NAME = 'femessage-update-popup'
 
 class UpdatePopup {
+  constructor(
+    options = {
+      publicPath: ''
+    }
+  ) {
+    this.options = options
+  }
+
   /** @type {(compiler: import('webpack').Compiler) => void} */
   apply(compiler) {
     // common
@@ -24,17 +32,16 @@ class UpdatePopup {
     if (_get(compiler, 'options.mode') !== 'production') return
 
     // 修改 webpack 入口文件
-    compiler.options.entry = resolveWebpackEntry(
-      compiler.options.entry,
-      {
-        NAME,
-        filePath: resolveTmp('main.js')
-      }
-    )
+    compiler.options.entry = resolveWebpackEntry(compiler.options.entry, {
+      NAME,
+      filePath: resolveTmp('main.js')
+    })
 
     // 先生成写入版本号的文件到 .tmp
     compiler.hooks.beforeRun.tap(NAME, () => {
-      const publicPath = _get(compiler, 'options.output.publicPath', '')
+      const publicPath =
+        _get(this, 'options.publicPath') ||
+        _get(compiler, 'options.output.publicPath', '')
 
       /** @type {(filePath: PathLike, replaceStrMap: {[k: string]: PathLike}) => string} */
       const replaceFileStr = (filePath, replaceStrMap = {}) => {
@@ -50,7 +57,11 @@ class UpdatePopup {
 
       const mainFile = {
         str: replaceFileStr(resolve('src', 'main.js'), {
-          '{{WORKER_FILE_PATH}}': path.join(publicPath, 'worker', 'update-popup.js')
+          '{{WORKER_FILE_PATH}}': path.join(
+            publicPath,
+            'worker',
+            'update-popup.js'
+          )
         }),
         dest: resolveTmp('main.js')
       }
@@ -70,10 +81,7 @@ class UpdatePopup {
     compiler.hooks.done.tap(NAME, () => {
       const outputPath = _get(compiler, 'outputPath', '')
 
-      fs.copySync(
-        resolveTmp('worker'),
-        path.join(outputPath, 'worker')
-      )
+      fs.copySync(resolveTmp('worker'), path.join(outputPath, 'worker'))
 
       // 版本号文件
       fs.outputFileSync(
