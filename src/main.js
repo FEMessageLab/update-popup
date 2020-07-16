@@ -11,7 +11,7 @@ function main() {
   // 上次访问时间 ms
   let lastSeenMS = 0
 
-  const worker = new Worker('{{prefix}}/worker/update-popup.js', {
+  const worker = new Worker('{{PUBLIC_PATH}}/worker/update-popup.js', {
     name: 'worker-updatePopup',
   })
 

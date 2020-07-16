@@ -27,7 +27,7 @@ function fetchVersion() {
     _: '' + Date.now(),
   })
 
-  fetch('{{prefix}}/version.txt' + '?' + params)
+  fetch('{{PUBLIC_PATH}}/version.txt' + '?' + params)
     .then(res => res.text())
     .then(ver => {
       self.postMessage({version: (ver || '').trim()})
