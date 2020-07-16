@@ -24,10 +24,13 @@ class UpdatePopup {
     if (_get(compiler, 'options.mode') !== 'production') return
 
     // 修改 webpack 入口文件
-    compiler.options.entry = resolveWebpackEntry(compiler.options.entry, {
-      NAME,
-      filePath: resolveTmp('main.js')
-    })
+    compiler.options.entry = resolveWebpackEntry(
+      compiler.options.entry,
+      {
+        NAME,
+        filePath: resolveTmp('main.js')
+      }
+    )
 
     // 先生成写入版本号的文件到 .tmp
     compiler.hooks.beforeRun.tap(NAME, () => {
@@ -45,29 +48,16 @@ class UpdatePopup {
         return str
       }
 
-      const correctFilePath = (publicPath, filePath) => {
-        let res = path.join(publicPath, filePath)
-
-        // path.join 会把以 `//` 开头的变更为 `/`
-        const isStartWithDoubleSlash = publicPath.slice(0, 2) === '//'
-        if (isStartWithDoubleSlash) res = '/' + res
-
-        return res
-      }
-
       const mainFile = {
         str: replaceFileStr(resolve('src', 'main.js'), {
-          '{{WORKER_FILE_PATH}}': correctFilePath(
-            publicPath,
-            path.join('worker', 'update-popup.js')
-          )
+          '{{WORKER_FILE_PATH}}': path.join(publicPath, 'worker', 'update-popup.js')
         }),
         dest: resolveTmp('main.js')
       }
 
       const workerFile = {
         str: replaceFileStr(resolve('src', 'worker', 'update-popup.js'), {
-          '{{VERSION_FILE_PATH}}': correctFilePath(publicPath, 'version.txt')
+          '{{VERSION_FILE_PATH}}': path.join(publicPath, 'version.txt')
         }),
         dest: resolveTmp('worker', 'update-popup.js')
       }
@@ -80,7 +70,10 @@ class UpdatePopup {
     compiler.hooks.done.tap(NAME, () => {
       const outputPath = _get(compiler, 'outputPath', '')
 
-      fs.copySync(resolveTmp('worker'), path.join(outputPath, 'worker'))
+      fs.copySync(
+        resolveTmp('worker'),
+        path.join(outputPath, 'worker')
+      )
 
       // 版本号文件
       fs.outputFileSync(
