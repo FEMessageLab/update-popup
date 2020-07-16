@@ -13,6 +13,7 @@
 - [Features](#features)
 - [Install](#install)
 - [Usage](#usage)
+- [Notice](#notice)
 - [Contributing](#contributing)
 - [Contributors](#contributors)
 - [License](#license)
@@ -68,6 +69,16 @@ const config = {
 ```
 
 就这么简单！
+
+[⬆ Back to Top](#table-of-contents)
+
+## Notice
+
+### 环境变量
+
+#### PUBLIC_PATH
+
+- 最终输出文件路径依赖于 [webpack publicPath](https://webpack.docschina.org/configuration/output/#outputpublicpath)。
 
 [⬆ Back to Top](#table-of-contents)
 
