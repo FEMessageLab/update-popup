@@ -40,6 +40,7 @@ class UpdatePopup {
       const replaceFileStr = (filePath, replaceStrMap = {}) => {
         let str = fs.readFileSync(filePath, 'utf8')
 
+        // TODO 需要更好的替换内容，尽量执行1次
         Object.keys(replaceStrMap).forEach(k => {
           str = str.replace(k, replaceStrMap[k])
         })
