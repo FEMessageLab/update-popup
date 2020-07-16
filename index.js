@@ -5,6 +5,7 @@
 
 const path = require('path')
 const fs = require('fs-extra')
+const _get = require('lodash.get')
 /** @type {(...dir: Dir[]) => PathLike} */
 const resolve = (...dir) => path.resolve(__dirname, ...dir)
 /** @type {(...dir: Dir[]) => PathLike} */
@@ -15,15 +16,12 @@ const {resolveWebpackEntry} = require('./utils')
 const NAME = 'femessage-update-popup'
 
 class UpdatePopup {
-  constructor() {
-    // 注册 worker 和查询版本号文件路径前缀
-    // 由于 nuxt 的构建输出方式略微不同：先生成到 `/.nuxt/dist/client` 再复制到 `/dist/_nuxt`
-    this.prefix = ''
-  }
-
   /** @type {(compiler: import('webpack').Compiler) => void} */
   apply(compiler) {
+    // common
     if (process.env.NODE_ENV !== 'production') return
+    // v4
+    if (_get(compiler, 'options.mode') !== 'production') return
 
     // 修改 webpack 入口文件
     compiler.options.entry = resolveWebpackEntry(
@@ -36,20 +34,30 @@ class UpdatePopup {
 
     // 先生成写入版本号的文件到 .tmp
     compiler.hooks.beforeRun.tap(NAME, () => {
-      /** @type {(filePath: PathLike) => string} */
-      const replacePrefix = filePath => {
-        return fs
-          .readFileSync(filePath, 'utf8')
-          .replace('{{prefix}}', this.prefix)
+      const publicPath = _get(compiler, 'options.output.publicPath', '')
+
+      /** @type {(filePath: PathLike, replaceStrMap: {[k: string]: PathLike}) => string} */
+      const replaceFileStr = (filePath, replaceStrMap = {}) => {
+        let str = fs.readFileSync(filePath, 'utf8')
+
+        Object.keys(replaceStrMap).forEach(k => {
+          str = str.replace(k, replaceStrMap[k])
+        })
+
+        return str
       }
 
       const mainFile = {
-        str: replacePrefix(resolve('src', 'main.js')),
+        str: replaceFileStr(resolve('src', 'main.js'), {
+          '{{WORKER_FILE_PATH}}': path.join(publicPath, 'worker', 'update-popup.js')
+        }),
         dest: resolveTmp('main.js')
       }
 
       const workerFile = {
-        str: replacePrefix(resolve('src', 'worker', 'update-popup.js')),
+        str: replaceFileStr(resolve('src', 'worker', 'update-popup.js'), {
+          '{{VERSION_FILE_PATH}}': path.join(publicPath, 'version.txt')
+        }),
         dest: resolveTmp('worker', 'update-popup.js')
       }
 
@@ -59,7 +67,7 @@ class UpdatePopup {
 
     // 复制文件到 webpack 输出目录
     compiler.hooks.done.tap(NAME, () => {
-      const {outputPath} = compiler
+      const outputPath = _get(compiler, 'outputPath', '')
 
       fs.copySync(
         resolveTmp('worker'),
