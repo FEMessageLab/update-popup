@@ -125,9 +125,32 @@ publicPath，跟 webpack.config 的 `output.publicPath` 一致。
 
 ### QianKun（乾坤）
 
-#### 子应用
+#### 在子应用中使用
 
-mfe
+调整配置文件
+
+```diff
+# nuxt.config
+const config = {
+-  modules: ['@femessage/update-popup/nuxt']
++  modules: [['@femessage/update-popup/nuxt'], { inject: false }]
+}
+
+# vue cli
+const config = {
+  chainWebpack: config => {
+    config.plugin('update-popup').use(UpdatePopup, [
++     { inject: false }
+    ])
+  }
+}
+```
+
+最后在你的子应用入口文件添加
+
+```diff
+import '@femessage/update-popup/app/main'
+```
 
 [⬆ Back to Top](#table-of-contents)
 
