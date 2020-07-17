@@ -104,6 +104,13 @@ publicPath，跟 webpack.config 的 `output.publicPath` 一致。
 
 [⬆ Back to Top](#table-of-contents)
 
+### options.inject
+
+- Type: `boolean`
+- Default: `true`
+
+是否自动打包到代码中。
+
 ## Notice
 
 ### 环境变量
@@ -115,6 +122,12 @@ publicPath，跟 webpack.config 的 `output.publicPath` 一致。
 关于 PUBLIC_PATH 还有一些值得注意的事：
 
 - 如果你的构建产物是通过类似「网关」转发而访问的，即资源在 `assets.com` 但通过 `mydomain.com` 来进行访问。
+
+### QianKun（乾坤）
+
+#### 子应用
+
+mfe
 
 [⬆ Back to Top](#table-of-contents)
 
