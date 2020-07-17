@@ -18,3 +18,5 @@ docs/*.ttf
 *.sln
 .env
 .tmp
+
+app
