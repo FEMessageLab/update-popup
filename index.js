@@ -4,6 +4,7 @@
  */
 
 const path = require('path')
+const {join} = require('path')
 const fs = require('fs-extra')
 const _get = require('lodash.get')
 /** @type {(...dir: Dir[]) => PathLike} */
@@ -18,7 +19,8 @@ const NAME = 'femessage-update-popup'
 class UpdatePopup {
   constructor(
     options = {
-      publicPath: ''
+      publicPath: '',
+      mode: 'standalone'
     }
   ) {
     this.options = options
@@ -39,57 +41,90 @@ class UpdatePopup {
 
     // 先生成写入版本号的文件到 .tmp
     compiler.hooks.beforeRun.tap(NAME, () => {
+      // 清空缓存文件夹
+      fs.emptyDirSync(resolveTmp())
+
       const publicPath =
         _get(this, 'options.publicPath') ||
         _get(compiler, 'options.output.publicPath', '')
 
-      /** @type {(filePath: PathLike, replaceStrMap: {[k: string]: PathLike}) => string} */
-      const replaceFileStr = (filePath, replaceStrMap = {}) => {
-        let str = fs.readFileSync(filePath, 'utf8')
+      const waitForGenerate = []
 
-        // TODO 需要更好的替换内容，尽量执行1次
-        Object.keys(replaceStrMap).forEach(k => {
-          str = str.replace(k, replaceStrMap[k])
+      if (this.options.mode === 'standalone') {
+        waitForGenerate.push({
+          str: replaceFileStr(resolve('src', 'useStandalone', 'main.js'), {
+            '{{VERSION_FILE_PATH}}': correctPath(publicPath, 'version.txt')
+          }),
+          dest: resolveTmp('main.js')
+        })
+      }
+
+      if (this.options.mode === 'webWorker') {
+        waitForGenerate.push({
+          str: replaceFileStr(resolve('src', 'useWebWorker', 'main.js'), {
+            '{{WORKER_FILE_PATH}}': join(
+              publicPath,
+              'worker',
+              'update-popup.js'
+            )
+          }),
+          dest: resolveTmp('main.js')
         })
 
-        return str
+        waitForGenerate.push({
+          str: replaceFileStr(
+            resolve('src', 'useWebWorker', 'worker', 'update-popup.js'),
+            {
+              '{{VERSION_FILE_PATH}}': correctPath(publicPath, 'version.txt')
+            }
+          ),
+          dest: resolveTmp('worker', 'update-popup.js')
+        })
       }
 
-      const mainFile = {
-        str: replaceFileStr(resolve('src', 'main.js'), {
-          '{{WORKER_FILE_PATH}}': path.join(
-            publicPath,
-            'worker',
-            'update-popup.js'
-          )
-        }),
-        dest: resolveTmp('main.js')
-      }
-
-      const workerFile = {
-        str: replaceFileStr(resolve('src', 'worker', 'update-popup.js'), {
-          '{{VERSION_FILE_PATH}}': path.join(publicPath, 'version.txt')
-        }),
-        dest: resolveTmp('worker', 'update-popup.js')
-      }
-
-      fs.outputFileSync(mainFile.dest, mainFile.str)
-      fs.outputFileSync(workerFile.dest, workerFile.str)
+      waitForGenerate.forEach(item => {
+        fs.outputFileSync(item.dest, item.str)
+      })
     })
 
     // 复制文件到 webpack 输出目录
     compiler.hooks.done.tap(NAME, () => {
       const outputPath = _get(compiler, 'outputPath', '')
 
-      fs.copySync(resolveTmp('worker'), path.join(outputPath, 'worker'))
+      if (this.options.mode === 'webWorker') {
+        fs.copySync(resolveTmp('worker'), join(outputPath, 'worker'))
+      }
 
       // 版本号文件
       fs.outputFileSync(
-        path.join(outputPath, 'version.txt'),
-        process.env.VERSION || ''
+        join(outputPath, 'version.txt'),
+        process.env.VERSION || '1.0.0'
       )
     })
   }
 }
 
 module.exports = UpdatePopup
+
+/** @type {(filePath: PathLike, replaceStrMap: {[k: string]: PathLike}) => string} */
+function replaceFileStr(filePath, replaceStrMap = {}) {
+  let str = fs.readFileSync(filePath, 'utf8')
+
+  // TODO 需要更好的替换内容，尽量执行1次
+  Object.keys(replaceStrMap).forEach(k => {
+    str = str.replace(k, replaceStrMap[k])
+  })
+
+  return str
+}
+
+/** @type {(publicPath: PathLike, args: Array<PathLike>) => PathLike} */
+function correctPath(publicPath, ...args) {
+  let p = join(publicPath, ...args)
+
+  if (publicPath.slice(0, 2) === '//') {
+    p = '/' + p
+  }
+
+  return p
+}

@@ -13,6 +13,7 @@
 - [Features](#features)
 - [Install](#install)
 - [Usage](#usage)
+- [Options](#options)
 - [Notice](#notice)
 - [Contributing](#contributing)
 - [Contributors](#contributors)
@@ -52,7 +53,7 @@ VERSION=1.0.0
 ```js
 // nuxt.config.js
 const config = {
-  modules: ['@femessage/update-popup/nuxt'],
+  modules: ['@femessage/update-popup/nuxt']
 }
 ```
 
@@ -72,6 +73,37 @@ const config = {
 
 [⬆ Back to Top](#table-of-contents)
 
+## Options
+
+### options.publicPath
+
+- Type: `string`
+- Default: `undefined`
+
+一般情况下不需要设置此参数。
+
+publicPath，跟 webpack.config 的 `output.publicPath` 一致。  
+否需要设置此参数请阅读 [环境变量 PUBLIC_PATH](#publicpath) ！
+
+### options.mode
+
+- Type: `'standalone' | 'webWorker'`
+- Default: `'standalone'`
+
+#### standalone
+
+标准使用 interval 来检查新版本。
+
+#### webWorker
+
+使用 [Worker](https://developer.mozilla.org/zh-CN/docs/Web/API/Worker/Worker) 来检查新版本。
+
+#### 区别
+
+区别在于 Worker 会独立的运行在浏览器，专门负责检查新版本。
+
+[⬆ Back to Top](#table-of-contents)
+
 ## Notice
 
 ### 环境变量
@@ -79,6 +111,10 @@ const config = {
 #### PUBLIC_PATH
 
 - 最终输出文件路径依赖于 [webpack publicPath](https://webpack.docschina.org/configuration/output/#outputpublicpath)。
+
+关于 PUBLIC_PATH 还有一些值得注意的事：
+
+- 如果你的构建产物是通过类似「网关」转发而访问的，即资源在 `assets.com` 但通过 `mydomain.com` 来进行访问。
 
 [⬆ Back to Top](#table-of-contents)
 
