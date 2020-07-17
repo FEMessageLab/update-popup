@@ -17,13 +17,14 @@ const {resolveWebpackEntry} = require('./utils')
 const NAME = 'femessage-update-popup'
 
 class UpdatePopup {
-  constructor(
-    options = {
-      publicPath: '',
-      mode: 'standalone'
-    }
-  ) {
-    this.options = options
+  constructor(options) {
+    this.options = Object.assign(
+      {
+        publicPath: '',
+        mode: 'standalone'
+      },
+      options
+    )
   }
 
   /** @type {(compiler: import('webpack').Compiler) => void} */
