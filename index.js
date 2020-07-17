@@ -10,7 +10,7 @@ const _get = require('lodash.get')
 /** @type {(...dir: Dir[]) => PathLike} */
 const resolve = (...dir) => path.resolve(__dirname, ...dir)
 /** @type {(...dir: Dir[]) => PathLike} */
-const resolveTmp = (...dir) => resolve('.tmp', ...dir)
+const resolveApp = (...dir) => resolve('app', ...dir)
 
 const {resolveWebpackEntry} = require('./utils')
 
@@ -21,7 +21,8 @@ class UpdatePopup {
     this.options = Object.assign(
       {
         publicPath: '',
-        mode: 'standalone'
+        mode: 'standalone',
+        inject: true // 自动添加到 webpack.entry
       },
       options
     )
@@ -35,15 +36,17 @@ class UpdatePopup {
     if (_get(compiler, 'options.mode') !== 'production') return
 
     // 修改 webpack 入口文件
-    compiler.options.entry = resolveWebpackEntry(compiler.options.entry, {
-      NAME,
-      filePath: resolveTmp('main.js')
-    })
+    if (this.options.inject) {
+      compiler.options.entry = resolveWebpackEntry(compiler.options.entry, {
+        NAME,
+        filePath: resolveApp('main.js')
+      })
+    }
 
-    // 先生成写入版本号的文件到 .tmp
+    // 先生成写入版本号的文件到 app
     compiler.hooks.beforeRun.tap(NAME, () => {
       // 清空缓存文件夹
-      fs.emptyDirSync(resolveTmp())
+      fs.emptyDirSync(resolveApp())
 
       const publicPath =
         _get(this, 'options.publicPath') ||
@@ -56,7 +59,7 @@ class UpdatePopup {
           str: replaceFileStr(resolve('src', 'useStandalone', 'main.js'), {
             '{{VERSION_FILE_PATH}}': correctPath(publicPath, 'version.txt')
           }),
-          dest: resolveTmp('main.js')
+          dest: resolveApp('main.js')
         })
       }
 
@@ -69,7 +72,7 @@ class UpdatePopup {
               'update-popup.js'
             )
           }),
-          dest: resolveTmp('main.js')
+          dest: resolveApp('main.js')
         })
 
         waitForGenerate.push({
@@ -79,7 +82,7 @@ class UpdatePopup {
               '{{VERSION_FILE_PATH}}': correctPath(publicPath, 'version.txt')
             }
           ),
-          dest: resolveTmp('worker', 'update-popup.js')
+          dest: resolveApp('worker', 'update-popup.js')
         })
       }
 
@@ -93,7 +96,7 @@ class UpdatePopup {
       const outputPath = _get(compiler, 'outputPath', '')
 
       if (this.options.mode === 'webWorker') {
-        fs.copySync(resolveTmp('worker'), join(outputPath, 'worker'))
+        fs.copySync(resolveApp('worker'), join(outputPath, 'worker'))
       }
 
       // 版本号文件
