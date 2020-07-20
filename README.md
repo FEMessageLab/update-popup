@@ -13,6 +13,7 @@
 - [Features](#features)
 - [Install](#install)
 - [Usage](#usage)
+- [Options](#options)
 - [Notice](#notice)
 - [Contributing](#contributing)
 - [Contributors](#contributors)
@@ -52,7 +53,7 @@ VERSION=1.0.0
 ```js
 // nuxt.config.js
 const config = {
-  modules: ['@femessage/update-popup/nuxt'],
+  modules: ['@femessage/update-popup/nuxt']
 }
 ```
 
@@ -72,6 +73,42 @@ const config = {
 
 [⬆ Back to Top](#table-of-contents)
 
+## Options
+
+### options.publicPath
+
+- Type: `string`
+- Default: `undefined`
+
+一般情况下不需要设置此参数。
+
+publicPath，跟 webpack.config 的 `output.publicPath` 一致。  
+何时需要设置此参数请阅读 [环境变量 PUBLIC_PATH](#publicpath) 。
+
+### options.mode
+
+- Type: `'standalone' | 'webWorker'`
+- Default: `'standalone'`
+
+#### standalone
+
+标准使用 interval 来检查新版本。
+
+#### webWorker
+
+使用 [Worker](https://developer.mozilla.org/zh-CN/docs/Web/API/Worker/Worker) 来检查新版本。
+
+[⬆ Back to Top](#table-of-contents)
+
+### options.inject
+
+- Type: `boolean`
+- Default: `true`
+
+是否自动打包到代码中。  
+如果设置为`false`需要手动将`@femessage/update-popup/app/main`注入到你的代码中。  
+何时需要设置此参数请参阅 [QianKun（乾坤）](#qianKun（乾坤）)。
+
 ## Notice
 
 ### 环境变量
@@ -79,6 +116,39 @@ const config = {
 #### PUBLIC_PATH
 
 - 最终输出文件路径依赖于 [webpack publicPath](https://webpack.docschina.org/configuration/output/#outputpublicpath)。
+
+关于 PUBLIC_PATH 还有一些值得注意的事：
+
+- 如果你的构建产物是通过类似「网关」转发而访问的，即资源在 `assets.com` 但通过 `mydomain.com` 来进行访问。
+
+### QianKun（乾坤）
+
+#### 在子应用中使用
+
+调整配置文件
+
+```diff
+# nuxt.config
+const config = {
+-  modules: ['@femessage/update-popup/nuxt']
++  modules: [['@femessage/update-popup/nuxt'], { inject: false }]
+}
+
+# vue cli
+const config = {
+  chainWebpack: config => {
+    config.plugin('update-popup').use(UpdatePopup, [
++     { inject: false }
+    ])
+  }
+}
+```
+
+最后在你的**子应用**入口文件添加
+
+```diff
++ import '@femessage/update-popup/app/main'
+```
 
 [⬆ Back to Top](#table-of-contents)
 

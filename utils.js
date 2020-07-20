@@ -1,4 +1,18 @@
+/**
+ * @typedef {string} PathLike
+ * @typedef {string} Dir
+ * @typedef {{[k:string]: any}} obj
+ */
+
+const fs = require('fs-extra')
+const path = require('path')
+
+exports.join = path.join
+/** @type {(...dir: Dir[]) => PathLike} */
+exports.resolve = (...dir) => path.resolve(__dirname, ...dir)
+
 // https://webpack.js.org/configuration/entry-context/#entry
+/** @type {(webpackEntry: any | obj, opts: obj) => obj} */
 exports.resolveWebpackEntry = (webpackEntry, opts = {}) => {
   if (isObject(webpackEntry)) {
     return {
@@ -21,6 +35,33 @@ exports.resolveWebpackEntry = (webpackEntry, opts = {}) => {
     main: webpackEntry,
     [opts.NAME]: opts.filePath
   }
+}
+
+/**
+ * @type {(filePath: PathLike, replaceStrMap: {[k: string]: PathLike}) => string}
+ */
+exports.replaceFileStr = (filePath, replaceStrMap = {}) => {
+  let str = fs.readFileSync(filePath, 'utf8')
+
+  // TODO 需要更好的替换内容，尽量执行1次
+  Object.keys(replaceStrMap).forEach(k => {
+    str = str.replace(k, replaceStrMap[k])
+  })
+
+  return str
+}
+
+/**
+ * @type {(publicPath: PathLike, ...args: Array<PathLike>) => PathLike}
+ */
+exports.correctPath = (publicPath, ...args) => {
+  let p = path.join(publicPath, ...args)
+
+  if (publicPath.slice(0, 2) === '//') {
+    p = '/' + p
+  }
+
+  return p
 }
 
 function isObject(target) {

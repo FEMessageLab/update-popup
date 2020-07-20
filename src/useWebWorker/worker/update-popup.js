@@ -12,7 +12,7 @@ const cmd = {
   immediate: fetchVersion,
   startInterval,
   stopInterval,
-  close: () => self.close(),
+  close: () => self.close()
 }
 
 self.onmessage = event => {
@@ -24,7 +24,7 @@ self.onmessage = event => {
 function fetchVersion() {
   const params = new URLSearchParams({
     // 避免出现缓存情况
-    _: '' + Date.now(),
+    _: '' + Date.now()
   })
 
   fetch('{{VERSION_FILE_PATH}}' + '?' + params)

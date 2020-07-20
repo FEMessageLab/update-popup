@@ -12,7 +12,7 @@ function main() {
   let lastSeenMS = 0
 
   const worker = new Worker('{{WORKER_FILE_PATH}}', {
-    name: 'worker-updatePopup',
+    name: 'worker-updatePopup'
   })
 
   let popupFlag = false
@@ -45,8 +45,8 @@ function main() {
           text: '刷新',
           callback: () => {
             window.location.reload()
-          },
-        },
+          }
+        }
       })
     }, 1000)
   }
@@ -72,17 +72,17 @@ function main() {
   function dispatch(cmd, options = {}) {
     worker.postMessage({cmd, ...options})
   }
+}
 
-  function compareVersion(newVersion, currentVersion) {
-    if (newVersion && currentVersion) {
-      const n = newVersion.split('.')
-      const c = currentVersion.split('.')
+function compareVersion(newVersion, currentVersion) {
+  if (newVersion && currentVersion) {
+    const n = newVersion.split('.')
+    const c = currentVersion.split('.')
 
-      for (let i = 0; i <= n.length; i++) {
-        if (Number(n[i]) > Number(c[i])) return true
-      }
+    for (let i = 0; i <= n.length; i++) {
+      if (Number(n[i]) > Number(c[i])) return true
     }
-
-    return false
   }
+
+  return false
 }
