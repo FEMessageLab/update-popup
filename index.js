@@ -1,28 +1,39 @@
 /**
- * @typedef {string} PathLike
- * @typedef {string} Dir
+ * @typedef {import('./utils').PathLike} PathLike
+ * @typedef {import('./utils').Dir} Dir
  */
 
-const path = require('path')
-const {join} = require('path')
+/**
+ * @typedef {{
+ *  publicPath?: string
+ *  mode?: 'standalone' | 'webWorker'
+ *  inject?: boolean
+ * }} UpdatePopupOptions
+ */
+
 const fs = require('fs-extra')
 const _get = require('lodash.get')
-/** @type {(...dir: Dir[]) => PathLike} */
-const resolve = (...dir) => path.resolve(__dirname, ...dir)
+const {
+  resolveWebpackEntry,
+  replaceFileStr,
+  correctPath,
+  resolve,
+  join
+} = require('./utils')
+
 /** @type {(...dir: Dir[]) => PathLike} */
 const resolveApp = (...dir) => resolve('app', ...dir)
-
-const {resolveWebpackEntry} = require('./utils')
 
 const NAME = 'femessage-update-popup'
 
 class UpdatePopup {
+  /** @param {UpdatePopupOptions} options */
   constructor(options) {
     this.options = Object.assign(
       {
         publicPath: '',
         mode: 'standalone',
-        inject: true // 自动添加到 webpack.entry
+        inject: true // 自动注入到 webpack.entry
       },
       options
     )
@@ -109,26 +120,3 @@ class UpdatePopup {
 }
 
 module.exports = UpdatePopup
-
-/** @type {(filePath: PathLike, replaceStrMap: {[k: string]: PathLike}) => string} */
-function replaceFileStr(filePath, replaceStrMap = {}) {
-  let str = fs.readFileSync(filePath, 'utf8')
-
-  // TODO 需要更好的替换内容，尽量执行1次
-  Object.keys(replaceStrMap).forEach(k => {
-    str = str.replace(k, replaceStrMap[k])
-  })
-
-  return str
-}
-
-/** @type {(publicPath: PathLike, args: Array<PathLike>) => PathLike} */
-function correctPath(publicPath, ...args) {
-  let p = join(publicPath, ...args)
-
-  if (publicPath.slice(0, 2) === '//') {
-    p = '/' + p
-  }
-
-  return p
-}
