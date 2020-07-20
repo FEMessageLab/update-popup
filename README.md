@@ -83,7 +83,7 @@ const config = {
 一般情况下不需要设置此参数。
 
 publicPath，跟 webpack.config 的 `output.publicPath` 一致。  
-否需要设置此参数请阅读 [环境变量 PUBLIC_PATH](#publicpath) ！
+何时需要设置此参数请阅读 [环境变量 PUBLIC_PATH](#publicpath) 。
 
 ### options.mode
 
@@ -98,10 +98,6 @@ publicPath，跟 webpack.config 的 `output.publicPath` 一致。
 
 使用 [Worker](https://developer.mozilla.org/zh-CN/docs/Web/API/Worker/Worker) 来检查新版本。
 
-#### 区别
-
-区别在于 Worker 会独立的运行在浏览器，专门负责检查新版本。
-
 [⬆ Back to Top](#table-of-contents)
 
 ### options.inject
@@ -109,7 +105,9 @@ publicPath，跟 webpack.config 的 `output.publicPath` 一致。
 - Type: `boolean`
 - Default: `true`
 
-是否自动打包到代码中。
+是否自动打包到代码中。  
+如果设置为`false`需要手动将`@femessage/update-popup/app/main`注入到你的代码中。  
+何时需要设置此参数请参阅 [QianKun（乾坤）](#qianKun（乾坤）)。
 
 ## Notice
 
@@ -146,10 +144,10 @@ const config = {
 }
 ```
 
-最后在你的子应用入口文件添加
+最后在你的**子应用**入口文件添加
 
 ```diff
-import '@femessage/update-popup/app/main'
++ import '@femessage/update-popup/app/main'
 ```
 
 [⬆ Back to Top](#table-of-contents)
