@@ -1,7 +1,6 @@
 /**
  * @typedef {import('./utils').PathLike} PathLike
  * @typedef {import('./utils').Dir} Dir
- * @typedef {{str: string, dest: PathLike}} WaitForGenerate
  * @typedef {import('./utils').obj} obj
  */
 
