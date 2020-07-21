@@ -92,7 +92,7 @@ publicPath，跟 webpack.config 的 `output.publicPath` 一致。
 
 #### standalone
 
-标准使用 interval 来检查新版本。
+标准模式。
 
 #### webWorker
 
@@ -106,8 +106,15 @@ publicPath，跟 webpack.config 的 `output.publicPath` 一致。
 - Default: `true`
 
 是否自动打包到代码中。  
-如果设置为`false`需要手动将`@femessage/update-popup/app/main`注入到你的代码中。  
+如果设置为 `false` 需要手动将 `@femessage/update-popup/app/main` 注入到你的代码中。  
 何时需要设置此参数请参阅 [QianKun（乾坤）](#qianKun（乾坤）)。
+
+### options.envKey
+
+- Type: `string`
+- Default: `'UPDATE_POPUP_VERSION'`
+
+根据 key 来获取环境变量值。e.g. `process.env.UPDATE_POPUP_VERSION=1.0.0`
 
 ## Notice
 
