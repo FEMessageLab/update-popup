@@ -68,7 +68,7 @@ class UpdatePopup {
       if (this.options.mode === 'standalone') {
         waitForGenerate.push({
           str: replaceFileStr(resolve('src', 'useStandalone', 'main.js'), {
-            '{{VERSION_FILE_PATH}}': correctPath(publicPath, 'version.txt')
+            VERSION_FILE_PATH: correctPath(publicPath, 'version.txt')
           }),
           dest: resolveApp('main.js')
         })
@@ -77,11 +77,7 @@ class UpdatePopup {
       if (this.options.mode === 'webWorker') {
         waitForGenerate.push({
           str: replaceFileStr(resolve('src', 'useWebWorker', 'main.js'), {
-            '{{WORKER_FILE_PATH}}': join(
-              publicPath,
-              'worker',
-              'update-popup.js'
-            )
+            WORKER_FILE_PATH: join(publicPath, 'worker', 'update-popup.js')
           }),
           dest: resolveApp('main.js')
         })
@@ -90,7 +86,7 @@ class UpdatePopup {
           str: replaceFileStr(
             resolve('src', 'useWebWorker', 'worker', 'update-popup.js'),
             {
-              '{{VERSION_FILE_PATH}}': correctPath(publicPath, 'version.txt')
+              VERSION_FILE_PATH: correctPath(publicPath, 'version.txt')
             }
           ),
           dest: resolveApp('worker', 'update-popup.js')

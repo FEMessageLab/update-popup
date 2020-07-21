@@ -6,6 +6,7 @@
 
 const fs = require('fs-extra')
 const path = require('path')
+const pupa = require('pupa')
 
 exports.join = path.join
 /** @type {(...dir: Dir[]) => PathLike} */
@@ -41,14 +42,7 @@ exports.resolveWebpackEntry = (webpackEntry, opts = {}) => {
  * @type {(filePath: PathLike, replaceStrMap: {[k: string]: PathLike}) => string}
  */
 exports.replaceFileStr = (filePath, replaceStrMap = {}) => {
-  let str = fs.readFileSync(filePath, 'utf8')
-
-  // TODO 需要更好的替换内容，尽量执行1次
-  Object.keys(replaceStrMap).forEach(k => {
-    str = str.replace(k, replaceStrMap[k])
-  })
-
-  return str
+  return pupa(fs.readFileSync(filePath, 'utf8'), replaceStrMap)
 }
 
 /**

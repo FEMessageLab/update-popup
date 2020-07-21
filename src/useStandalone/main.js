@@ -61,7 +61,7 @@ function main() {
       _: '' + Date.now()
     })
 
-    fetch('{{VERSION_FILE_PATH}}' + '?' + params)
+    fetch('{VERSION_FILE_PATH}' + '?' + params)
       .then(res => res.text())
       .then(ver => {
         if (compareVersion(ver, currentVersion)) {
