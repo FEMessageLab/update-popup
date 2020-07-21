@@ -39,11 +39,10 @@ exports.resolveWebpackEntry = (webpackEntry, opts = {}) => {
 }
 
 /**
- * @type {(filePath: PathLike, replaceStrMap: {[k: string]: PathLike}) => string}
+ * @type {(content: PathLike, replaceStrMap: {[k: string]: string}) => string}
  */
-exports.replaceFileStr = (filePath, replaceStrMap = {}) => {
-  return pupa(fs.readFileSync(filePath, 'utf8'), replaceStrMap)
-}
+exports.replaceStr = (content, replaceStrMap = {}) =>
+  pupa(content, replaceStrMap)
 
 /**
  * @type {(publicPath: PathLike, ...args: Array<PathLike>) => PathLike}
@@ -56,13 +55,6 @@ exports.correctPath = (publicPath, ...args) => {
   }
 
   return p
-}
-
-/**
- * @type {(items: Array<import('.').WaitForGenerate>) => void}
- */
-exports.generateFiles = items => {
-  items.forEach(({str, dest}) => fs.outputFileSync(dest, str))
 }
 
 function isObject(target) {

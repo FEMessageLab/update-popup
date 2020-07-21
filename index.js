@@ -2,6 +2,7 @@
  * @typedef {import('./utils').PathLike} PathLike
  * @typedef {import('./utils').Dir} Dir
  * @typedef {{str: string, dest: PathLike}} WaitForGenerate
+ * @typedef {import('./utils').obj} obj
  */
 
 /**
@@ -17,15 +18,16 @@ const fs = require('fs-extra')
 const _get = require('lodash.get')
 const {
   resolveWebpackEntry,
-  replaceFileStr,
+  replaceStr,
   correctPath,
   resolve,
-  join,
-  generateFiles
+  join
 } = require('./utils')
 
 /** @type {(...dir: Dir[]) => PathLike} */
 const resolveApp = (...dir) => resolve('app', ...dir)
+/** @type {(filePath: PathLike) => string} */
+const readFile = filePath => fs.readFileSync(filePath, 'utf8')
 
 const NAME = 'femessage-update-popup'
 
@@ -69,42 +71,27 @@ class UpdatePopup {
         _get(this, 'options.publicPath') ||
         _get(compiler, 'options.output.publicPath', '')
 
-      /** @type {Array<WaitForGenerate>} */
-      const waitForGenerate = []
-
       if (this.options.mode === 'standalone') {
-        waitForGenerate.push({
-          str: replaceFileStr(resolve('src', 'useStandalone', 'main.js'), {
-            VERSION_FILE_PATH: correctPath(publicPath, 'version.txt'),
-            envKey: this.options.envKey,
-            currentVersion: this.version
-          }),
-          dest: resolveApp('main.js')
-        })
+        this.generateFile(
+          resolveApp('main.js'),
+          readFile(resolve('src', 'useStandalone', 'main.js')),
+          {VERSION_FILE_PATH: correctPath(publicPath, 'version.txt')}
+        )
       }
 
       if (this.options.mode === 'webWorker') {
-        waitForGenerate.push({
-          str: replaceFileStr(resolve('src', 'useWebWorker', 'main.js'), {
-            WORKER_FILE_PATH: join(publicPath, 'worker', 'update-popup.js'),
-            envKey: this.options.envKey,
-            currentVersion: this.version
-          }),
-          dest: resolveApp('main.js')
-        })
+        this.generateFile(
+          resolveApp('main.js'),
+          readFile(resolve('src', 'useWebWorker', 'main.js')),
+          {WORKER_FILE_PATH: join(publicPath, 'worker', 'update-popup.js')}
+        )
 
-        waitForGenerate.push({
-          str: replaceFileStr(
-            resolve('src', 'useWebWorker', 'worker', 'update-popup.js'),
-            {
-              VERSION_FILE_PATH: correctPath(publicPath, 'version.txt')
-            }
-          ),
-          dest: resolveApp('worker', 'update-popup.js')
-        })
+        this.generateFile(
+          resolveApp('worker', 'update-popup.js'),
+          readFile(resolve('src', 'useWebWorker', 'worker', 'update-popup.js')),
+          {VERSION_FILE_PATH: correctPath(publicPath, 'version.txt')}
+        )
       }
-
-      generateFiles(waitForGenerate)
     })
 
     // 复制文件到 webpack 输出目录
@@ -118,6 +105,19 @@ class UpdatePopup {
       // 版本号文件
       fs.outputFileSync(join(outputPath, 'version.txt'), this.version)
     })
+  }
+
+  /** @type {(dest: PathLike, content: string, extraReplacement: obj) => void} */
+  generateFile(dest = '', content = '', extraReplacement = {}) {
+    console.log(this)
+    fs.outputFileSync(
+      dest,
+      replaceStr(content, {
+        envKey: this.options.envKey,
+        currentVersion: this.version,
+        ...extraReplacement
+      })
+    )
   }
 }
 
