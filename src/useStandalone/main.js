@@ -7,7 +7,7 @@ function main() {
   if (process.env.NODE_ENV !== 'production') return
 
   // 当前应用版本
-  const currentVersion = '{currentVersion}'
+  const currentVersion = '{{currentVersion}}'
   // 上次访问时间 ms
   let lastSeenMS = 0
 
@@ -61,7 +61,7 @@ function main() {
       _: '' + Date.now()
     })
 
-    fetch('{VERSION_FILE_PATH}' + '?' + params)
+    fetch('{{VERSION_FILE_PATH}}' + '?' + params)
       .then(res => res.text())
       .then(ver => {
         if (compareVersion(ver, currentVersion)) {

@@ -7,11 +7,11 @@ function main() {
   if (process.env.NODE_ENV !== 'production') return
 
   // 当前应用版本
-  const currentVersion = '{currentVersion}'
+  const currentVersion = '{{currentVersion}}'
   // 上次访问时间 ms
   let lastSeenMS = 0
 
-  const worker = new Worker('{WORKER_FILE_PATH}', {
+  const worker = new Worker('{{WORKER_FILE_PATH}}', {
     name: 'worker-updatePopup'
   })
 
