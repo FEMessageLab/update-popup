@@ -109,7 +109,6 @@ class UpdatePopup {
 
   /** @type {(dest: PathLike, content: string, extraReplacement: obj) => void} */
   generateFile(dest = '', content = '', extraReplacement = {}) {
-    console.log(this)
     fs.outputFileSync(
       dest,
       replaceStr(content, {
