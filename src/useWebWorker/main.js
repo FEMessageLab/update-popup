@@ -7,7 +7,7 @@ function main() {
   if (process.env.NODE_ENV !== 'production') return
 
   // 当前应用版本
-  const currentVersion = process.env.VERSION || '1.0.0'
+  const currentVersion = '{currentVersion}'
   // 上次访问时间 ms
   let lastSeenMS = 0
 

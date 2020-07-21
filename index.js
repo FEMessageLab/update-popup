@@ -8,6 +8,7 @@
  *  publicPath?: string
  *  mode?: 'standalone' | 'webWorker'
  *  inject?: boolean
+ *  envKey?: string
  * }} UpdatePopupOptions
  */
 
@@ -33,10 +34,13 @@ class UpdatePopup {
       {
         publicPath: '',
         mode: 'standalone',
-        inject: true // 自动注入到 webpack.entry
+        inject: true, // 自动注入到 webpack.entry
+        envKey: 'UPDATE_POPUP_VERSION'
       },
       options
     )
+
+    this.version = process.env[this.options.envKey] || '1.0.0'
   }
 
   /** @type {(compiler: import('webpack').Compiler) => void} */
@@ -68,7 +72,9 @@ class UpdatePopup {
       if (this.options.mode === 'standalone') {
         waitForGenerate.push({
           str: replaceFileStr(resolve('src', 'useStandalone', 'main.js'), {
-            VERSION_FILE_PATH: correctPath(publicPath, 'version.txt')
+            VERSION_FILE_PATH: correctPath(publicPath, 'version.txt'),
+            envKey: this.options.envKey,
+            currentVersion: this.version
           }),
           dest: resolveApp('main.js')
         })
@@ -77,7 +83,9 @@ class UpdatePopup {
       if (this.options.mode === 'webWorker') {
         waitForGenerate.push({
           str: replaceFileStr(resolve('src', 'useWebWorker', 'main.js'), {
-            WORKER_FILE_PATH: join(publicPath, 'worker', 'update-popup.js')
+            WORKER_FILE_PATH: join(publicPath, 'worker', 'update-popup.js'),
+            envKey: this.options.envKey,
+            currentVersion: this.version
           }),
           dest: resolveApp('main.js')
         })
@@ -107,10 +115,7 @@ class UpdatePopup {
       }
 
       // 版本号文件
-      fs.outputFileSync(
-        join(outputPath, 'version.txt'),
-        process.env.VERSION || '1.0.0'
-      )
+      fs.outputFileSync(join(outputPath, 'version.txt'), this.version)
     })
   }
 }
