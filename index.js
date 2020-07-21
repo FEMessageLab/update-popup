@@ -1,6 +1,7 @@
 /**
  * @typedef {import('./utils').PathLike} PathLike
  * @typedef {import('./utils').Dir} Dir
+ * @typedef {{str: string, dest: PathLike}} WaitForGenerate
  */
 
 /**
@@ -19,7 +20,8 @@ const {
   replaceFileStr,
   correctPath,
   resolve,
-  join
+  join,
+  generateFiles
 } = require('./utils')
 
 /** @type {(...dir: Dir[]) => PathLike} */
@@ -67,6 +69,7 @@ class UpdatePopup {
         _get(this, 'options.publicPath') ||
         _get(compiler, 'options.output.publicPath', '')
 
+      /** @type {Array<WaitForGenerate>} */
       const waitForGenerate = []
 
       if (this.options.mode === 'standalone') {
@@ -101,9 +104,7 @@ class UpdatePopup {
         })
       }
 
-      waitForGenerate.forEach(item => {
-        fs.outputFileSync(item.dest, item.str)
-      })
+      generateFiles(waitForGenerate)
     })
 
     // 复制文件到 webpack 输出目录

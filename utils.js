@@ -58,6 +58,13 @@ exports.correctPath = (publicPath, ...args) => {
   return p
 }
 
+/**
+ * @type {(items: Array<import('.').WaitForGenerate>) => void}
+ */
+exports.generateFiles = items => {
+  items.forEach(({str, dest}) => fs.outputFileSync(dest, str))
+}
+
 function isObject(target) {
   return Object.prototype.toString.call(target) === '[object Object]'
 }
