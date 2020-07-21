@@ -1,7 +1,4 @@
 // Modified from sindresorhus/pupa
-// Drop single BraceRegex replacement behavior
-
-const {htmlEscape} = require('escape-goat')
 
 module.exports = (template, data) => {
   if (typeof template !== 'string') {
@@ -26,7 +23,7 @@ module.exports = (template, data) => {
         result = result ? result[property] : ''
       }
 
-      return htmlEscape(String(result))
+      return String(result)
     })
   }
 
