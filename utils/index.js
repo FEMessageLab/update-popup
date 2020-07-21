@@ -4,13 +4,12 @@
  * @typedef {{[k:string]: any}} obj
  */
 
-const fs = require('fs-extra')
 const path = require('path')
-const pupa = require('pupa')
+const pupa = require('./pupa')
 
 exports.join = path.join
 /** @type {(...dir: Dir[]) => PathLike} */
-exports.resolve = (...dir) => path.resolve(__dirname, ...dir)
+exports.resolve = (...dir) => path.resolve(__dirname, '..', ...dir)
 
 // https://webpack.js.org/configuration/entry-context/#entry
 /** @type {(webpackEntry: any | obj, opts: obj) => obj} */
@@ -41,8 +40,9 @@ exports.resolveWebpackEntry = (webpackEntry, opts = {}) => {
 /**
  * @type {(content: PathLike, replaceStrMap: {[k: string]: string}) => string}
  */
-exports.replaceStr = (content, replaceStrMap = {}) =>
-  pupa(content, replaceStrMap)
+exports.replaceStr = (content, replaceStrMap = {}) => {
+  return pupa(content, replaceStrMap)
+}
 
 /**
  * @type {(publicPath: PathLike, ...args: Array<PathLike>) => PathLike}
