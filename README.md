@@ -42,10 +42,11 @@ yarn add @femessage/update-popup
 
 ## Usage
 
-你需要通过环境变量 `VERSION` 来传入版本号，后续每次迭代更新只需要修改比当前大的版本号即可。
+你需要通过环境变量 `UPDATE_POPUP_VERSION` 来传入版本号，后续每次迭代更新只需要修改比当前大的版本号即可。
 
-```env
-VERSION=1.0.0
+```bash
+# .env
+UPDATE_POPUP_VERSION=1.0.0
 ```
 
 ### Nuxt.js
@@ -78,11 +79,10 @@ const config = {
 ### options.publicPath
 
 - Type: `string`
-- Default: `undefined`
+- Default: `webpackConfig.output.publicPath`
+- Link: [webpack publicPath](https://webpack.docschina.org/configuration/output/#outputpublicpath)
 
-一般情况下不需要设置此参数。
-
-publicPath，跟 webpack.config 的 `output.publicPath` 一致。  
+使用独立的 publicPath，一般情况下不需要设置此参数。  
 何时需要设置此参数请阅读 [环境变量 PUBLIC_PATH](#publicpath) 。
 
 ### options.mode
@@ -105,16 +105,16 @@ publicPath，跟 webpack.config 的 `output.publicPath` 一致。
 - Type: `boolean`
 - Default: `true`
 
-是否自动打包到代码中。  
+是否自动添加到 webpack 入口文件，一般情况下不需要设置此参数。  
 如果设置为 `false` 需要手动将 `@femessage/update-popup/app/main` 注入到你的代码中。  
-何时需要设置此参数请参阅 [QianKun（乾坤）](#qianKun（乾坤）)。
+何时需要设置此参数请参阅 [Notice.QianKun（乾坤）](#qianKun（乾坤）)。
 
 ### options.envKey
 
 - Type: `string`
 - Default: `'UPDATE_POPUP_VERSION'`
 
-根据 key 来获取环境变量值。e.g. `process.env.UPDATE_POPUP_VERSION=1.0.0`
+指定获取环境变量的 key 。e.g. `process.env.UPDATE_POPUP_VERSION=1.0.0`
 
 ## Notice
 
@@ -122,26 +122,26 @@ publicPath，跟 webpack.config 的 `output.publicPath` 一致。
 
 #### PUBLIC_PATH
 
-- 最终输出文件路径依赖于 [webpack publicPath](https://webpack.docschina.org/configuration/output/#outputpublicpath)。
-
-关于 PUBLIC_PATH 还有一些值得注意的事：
-
-- 如果你的构建产物是通过类似「网关」转发而访问的，即资源在 `assets.com` 但通过 `mydomain.com` 来进行访问。
+如果你的构建产物是通过类似「网关」转发而访问的，即资源在 `assets.com` 但通过 `mydomain.com` 来进行访问。
 
 ### QianKun（乾坤）
+
+此插件会自动生成一个普通的 js 文件并添加到 webpack 入口文件中，  
+但由于子应用的入口文件需要 **[导出生命周期钩子](https://qiankun.umijs.org/zh/guide/getting-started#1-%E5%AF%BC%E5%87%BA%E7%9B%B8%E5%BA%94%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E9%92%A9%E5%AD%90)** 的要求，  
+因此需要禁止自动添加入口文件，则做如下的调整：
 
 #### 在子应用中使用
 
 调整配置文件
 
 ```diff
-# nuxt.config
+# nuxt.config.js
 const config = {
 -  modules: ['@femessage/update-popup/nuxt']
 +  modules: [['@femessage/update-popup/nuxt'], { inject: false }]
 }
 
-# vue cli
+# vue.config.js
 const config = {
   chainWebpack: config => {
     config.plugin('update-popup').use(UpdatePopup, [
