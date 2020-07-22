@@ -94,7 +94,7 @@ const config = {
 
 - Type: `string`
 - Default: `webpackConfig.output.publicPath`
-- Link: [webpack publicPath](https://webpack.docschina.org/configuration/output/#outputpublicpath)
+- Reference: [webpack publicPath](https://webpack.docschina.org/configuration/output/#outputpublicpath)
 
 使用独立的 publicPath，一般情况下不需要设置此参数。  
 何时需要设置此参数请阅读 [环境变量 PUBLIC_PATH](#publicpath) 。
@@ -158,11 +158,24 @@ const config = {
 # vue.config.js
 const config = {
   chainWebpack: config => {
-    config.plugin('update-popup').use(UpdatePopup, [
-+     { inject: false }
-    ])
+    config.plugin('update-popup').use(UpdatePopup, [{
++     inject: false
+    }])
   }
 }
+
+# poi.config.js
+const config = {
+  plugins: [
+    {
+      resolve: require.resolve('@femessage/update-popup/poi'),
+      options: {
++       inject: false
+      }
+    }
+  ]
+}
+
 ```
 
 最后在你的**子应用**入口文件添加
