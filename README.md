@@ -121,7 +121,7 @@ const config = {
 
 是否自动添加到 webpack 入口文件，一般情况下不需要设置此参数。  
 如果设置为 `false` 需要手动将 `@femessage/update-popup/app/main` 注入到你的代码中。  
-何时需要设置此参数请参阅 [Notice.QianKun（乾坤）](#qianKun（乾坤）)。
+何时需要设置此参数请参阅 [Notice.QianKun（乾坤）](#qiankun乾坤)。
 
 ### options.envKey
 
