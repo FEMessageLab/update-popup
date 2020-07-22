@@ -65,8 +65,22 @@ const config = {
 const UpdatePopup = require('@femessage/update-popup')
 const config = {
   chainWebpack: config => {
-    config.plugin('update-popup').use(UpdatePopup)
+    config.plugin('femessage-update-popup').use(UpdatePopup)
   }
+}
+```
+
+### Poi
+
+```js
+// poi.config.js
+const config = {
+  plugins: [
+    {
+      resolve: require.resolve('@femessage/update-popup/poi'),
+      options: {}
+    }
+  ]
 }
 ```
 
