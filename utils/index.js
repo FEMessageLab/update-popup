@@ -8,6 +8,7 @@ const path = require('path')
 const pupa = require('./pupa')
 
 exports.join = path.join
+
 /** @type {(...dir: Dir[]) => PathLike} */
 exports.resolve = (...dir) => path.resolve(__dirname, '..', ...dir)
 
