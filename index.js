@@ -1,6 +1,5 @@
 /**
  * @typedef {import('./utils').PathLike} PathLike
- * @typedef {import('./utils').Dir} Dir
  * @typedef {import('./utils').obj} obj
  */
 
@@ -23,7 +22,7 @@ const {
   join
 } = require('./utils')
 
-/** @type {(...dir: Dir[]) => PathLike} */
+/** @type {(...dir: PathLike[]) => PathLike} */
 const resolveApp = (...dir) => resolve('app', ...dir)
 /** @type {(filePath: PathLike) => string} */
 const readFile = filePath => fs.readFileSync(filePath, 'utf8')
