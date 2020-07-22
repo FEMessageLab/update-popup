@@ -82,7 +82,13 @@ class UpdatePopup {
         this.generateFile(
           resolveApp('main.js'),
           readFile(resolve('src', 'useWebWorker', 'main.js')),
-          {WORKER_FILE_PATH: join(publicPath, 'worker', 'update-popup.js')}
+          {
+            WORKER_FILE_PATH: correctPath(
+              publicPath,
+              'worker',
+              'update-popup.js'
+            )
+          }
         )
 
         this.generateFile(
