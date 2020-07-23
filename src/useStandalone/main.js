@@ -11,7 +11,7 @@ function main() {
   // 上次访问时间 ms
   let lastSeenMS = 0
 
-  const {dispatch} = createInterval(checkVersion)
+  const {dispatch} = createInterval(fetchVersion)
 
   let popupFlag = false
 
@@ -55,7 +55,7 @@ function main() {
     }
   }
 
-  function checkVersion() {
+  function fetchVersion() {
     const params = new URLSearchParams({
       // 避免出现缓存情况
       _: '' + Date.now()
