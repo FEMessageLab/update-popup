@@ -21,8 +21,7 @@
 
 ## Introduction
 
-为了促进用户使用最新版本的系统，避免出现已修复的问题。  
-阅读[「检测新版本并提醒刷新-方案」](https://deepexi.yuque.com/docs/share/a9d2b329-79bd-4728-a660-c3a6a0550b59)来了解我们为何会产生这个插件。
+为了促进用户使用最新版本的系统，避免出现已修复的问题。
 
 [⬆ Back to Top](#table-of-contents)
 
@@ -175,7 +174,6 @@ const config = {
     }
   ]
 }
-
 ```
 
 最后在你的**子应用**入口文件添加
