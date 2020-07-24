@@ -43,23 +43,21 @@ yarn add @femessage/update-popup
 
 你需要通过环境变量 `UPDATE_POPUP_VERSION` 来传入版本号，后续每次迭代更新只需要修改比当前大的版本号即可。
 
+环境变量
+
 ```bash
 # .env
 UPDATE_POPUP_VERSION=1.0.0
 ```
 
-### Nuxt.js
+工程配置文件
 
 ```js
 // nuxt.config.js
 const config = {
   modules: ['@femessage/update-popup/nuxt']
 }
-```
 
-### Vue CLI
-
-```js
 // vue.config.js
 const UpdatePopup = require('@femessage/update-popup')
 const config = {
@@ -67,11 +65,7 @@ const config = {
     config.plugin('femessage-update-popup').use(UpdatePopup)
   }
 }
-```
 
-### Poi
-
-```js
 // poi.config.js
 const config = {
   plugins: [
@@ -152,7 +146,7 @@ const config = {
 
 #### 在子应用中使用
 
-调整配置文件
+调整工程配置文件
 
 ```diff
 # nuxt.config.js
