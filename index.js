@@ -9,6 +9,7 @@
  *  mode?: 'standalone' | 'webWorker'
  *  inject?: boolean
  *  envKey?: string
+ *  versionFileName?: string
  * }} UpdatePopupOptions
  */
 
@@ -37,7 +38,8 @@ class UpdatePopup {
         publicPath: '',
         mode: 'standalone',
         inject: true, // 自动注入到 webpack.entry
-        envKey: 'UPDATE_POPUP_VERSION'
+        envKey: 'UPDATE_POPUP_VERSION',
+        versionFileName: 'update_popup_version.txt'
       },
       options
     )
@@ -73,7 +75,12 @@ class UpdatePopup {
         this.generateFile(
           resolveApp('main.js'),
           readFile(resolve('src', 'useStandalone', 'main.js')),
-          {VERSION_FILE_PATH: correctPath(publicPath, 'version.txt')}
+          {
+            VERSION_FILE_PATH: correctPath(
+              publicPath,
+              this.options.versionFileName
+            )
+          }
         )
       }
 
@@ -93,7 +100,12 @@ class UpdatePopup {
         this.generateFile(
           resolveApp('worker', 'update-popup.js'),
           readFile(resolve('src', 'useWebWorker', 'worker', 'update-popup.js')),
-          {VERSION_FILE_PATH: correctPath(publicPath, 'version.txt')}
+          {
+            VERSION_FILE_PATH: correctPath(
+              publicPath,
+              this.options.versionFileName
+            )
+          }
         )
       }
     })
@@ -107,7 +119,10 @@ class UpdatePopup {
       }
 
       // 版本号文件
-      fs.outputFileSync(join(outputPath, 'version.txt'), this.version)
+      fs.outputFileSync(
+        join(outputPath, this.options.versionFileName),
+        this.version
+      )
     })
   }
 
