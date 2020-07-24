@@ -10,6 +10,8 @@ function main() {
   const currentVersion = '{{currentVersion}}'
   // 上次访问时间 ms
   let lastSeenMS = 0
+  // 一秒 ms
+  const OneSecondMS = 1000
 
   const worker = new Worker('{{WORKER_FILE_PATH}}', {
     name: 'worker-updatePopup'
@@ -23,7 +25,7 @@ function main() {
     const data = event.data
     const {version} = data
 
-    if (compareVersion(version, currentVersion)) {
+    if (compareVersion((version || '').trim(), currentVersion)) {
       if (popupFlag) return
       showRefreshPopup()
     }
@@ -48,7 +50,7 @@ function main() {
           }
         }
       })
-    }, 1000)
+    }, OneSecondMS)
   }
 
   function checker() {
@@ -62,9 +64,9 @@ function main() {
       const currentMS = Date.now()
 
       // 防止10秒之内频繁切换
-      if (currentMS - lastSeenMS > 10000) {
+      if (currentMS - lastSeenMS > OneSecondMS * 10) {
         dispatch('immediate')
-        dispatch('startInterval', {interval: 3600000})
+        dispatch('startInterval', {interval: OneSecondMS * 60 * 60})
       }
     }
   }

@@ -10,6 +10,8 @@ function main() {
   const currentVersion = '{{currentVersion}}'
   // 上次访问时间 ms
   let lastSeenMS = 0
+  // 一秒 ms
+  const OneSecondMS = 1000
 
   const {dispatch} = createInterval(fetchVersion)
 
@@ -34,7 +36,7 @@ function main() {
           }
         }
       })
-    }, 1000)
+    }, OneSecondMS)
   }
 
   function checker() {
@@ -48,23 +50,18 @@ function main() {
       const currentMS = Date.now()
 
       // 防止10秒之内频繁切换
-      if (currentMS - lastSeenMS > 10000) {
+      if (currentMS - lastSeenMS > OneSecondMS * 10) {
         dispatch('immediate')
-        dispatch('startInterval', {interval: 3600000})
+        dispatch('startInterval', {interval: OneSecondMS * 60 * 60})
       }
     }
   }
 
   function fetchVersion() {
-    const params = new URLSearchParams({
-      // 避免出现缓存情况
-      _: '' + Date.now()
-    })
-
-    fetch('{{VERSION_FILE_PATH}}' + '?' + params)
+    fetch('{{VERSION_FILE_PATH}}' + '?_=' + Date.now())
       .then(res => res.text())
-      .then(ver => {
-        if (compareVersion(ver, currentVersion)) {
+      .then(version => {
+        if (compareVersion((version || '').trim(), currentVersion)) {
           if (popupFlag) return
           showRefreshPopup()
         }

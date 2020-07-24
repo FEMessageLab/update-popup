@@ -22,14 +22,9 @@ self.onmessage = event => {
 }
 
 function fetchVersion() {
-  const params = new URLSearchParams({
-    // 避免出现缓存情况
-    _: '' + Date.now()
-  })
-
-  fetch('{{VERSION_FILE_PATH}}' + '?' + params)
+  fetch('{{VERSION_FILE_PATH}}' + '?_=' + Date.now())
     .then(res => res.text())
-    .then(ver => {
-      self.postMessage({version: (ver || '').trim()})
+    .then(version => {
+      self.postMessage({version})
     })
 }
