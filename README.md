@@ -79,8 +79,7 @@ const config = {
 - Default: `webpackConfig.output.publicPath`
 - Reference: [webpack publicPath](https://webpack.docschina.org/configuration/output/#outputpublicpath)
 
-使用独立的 publicPath，一般情况下不需要设置此参数。  
-何时需要设置此参数请阅读 [环境变量 PUBLIC_PATH](#publicpath) 。
+使用独立的 publicPath，一般情况下不需要设置此参数。
 
 ### options.mode
 
@@ -121,12 +120,6 @@ const config = {
 版本号文件名。
 
 ## Notice
-
-### 环境变量
-
-#### PUBLIC_PATH
-
-如果你的构建产物是通过类似「网关」转发而访问的，即资源在 `assets.com` 但通过 `mydomain.com` 来进行访问。
 
 ### QianKun（乾坤）
 
