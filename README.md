@@ -129,6 +129,13 @@ const config = {
 
 指定获取环境变量的 key 。e.g. `process.env.UPDATE_POPUP_VERSION=1.0.0`
 
+### options.versionFileName
+
+- Type: `string`
+- Default: `'update_popup_version.txt'`
+
+版本号文件名。
+
 ## Notice
 
 ### 环境变量
