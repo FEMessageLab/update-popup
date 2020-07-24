@@ -58,22 +58,12 @@ const config = {
   modules: ['@femessage/update-popup/nuxt']
 }
 
-// vue.config.js
+// vue.config.js 或者 poi.config.js
 const UpdatePopup = require('@femessage/update-popup')
 const config = {
   chainWebpack: config => {
     config.plugin('femessage-update-popup').use(UpdatePopup)
   }
-}
-
-// poi.config.js
-const config = {
-  plugins: [
-    {
-      resolve: require.resolve('@femessage/update-popup/poi'),
-      options: {}
-    }
-  ]
 }
 ```
 
@@ -155,25 +145,13 @@ const config = {
 +  modules: [['@femessage/update-popup/nuxt'], { inject: false }]
 }
 
-# vue.config.js
+# vue.config.js 或者 poi.config.js
 const config = {
   chainWebpack: config => {
     config.plugin('update-popup').use(UpdatePopup, [{
 +     inject: false
     }])
   }
-}
-
-# poi.config.js
-const config = {
-  plugins: [
-    {
-      resolve: require.resolve('@femessage/update-popup/poi'),
-      options: {
-+       inject: false
-      }
-    }
-  ]
 }
 ```
 
