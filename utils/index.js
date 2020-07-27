@@ -38,7 +38,7 @@ exports.resolveWebpackEntry = (webpackEntry, opts = {}) => {
 }
 
 /**
- * @type {(content: PathLike, replaceStrMap: {[k: string]: string}) => string}
+ * @type {(content: string, replaceStrMap: {[k: string]: string}) => string}
  */
 exports.replaceStr = (content, replaceStrMap = {}) => {
   return pupa(content, replaceStrMap)
