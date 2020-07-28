@@ -74,7 +74,7 @@ class UpdatePopup {
       if (this.options.mode === 'standalone') {
         this.generateFile(
           resolveApp('main.js'),
-          readFile(resolve('src', 'useStandalone', 'main.js')),
+          readFile(resolve('src', 'standalone', 'main.js')),
           {
             VERSION_FILE_PATH: correctPath(
               publicPath,
@@ -87,7 +87,7 @@ class UpdatePopup {
       if (this.options.mode === 'webWorker') {
         this.generateFile(
           resolveApp('main.js'),
-          readFile(resolve('src', 'useWebWorker', 'main.js')),
+          readFile(resolve('src', 'webWorker', 'main.js')),
           {
             WORKER_FILE_PATH: correctPath(
               publicPath,
@@ -99,7 +99,7 @@ class UpdatePopup {
 
         this.generateFile(
           resolveApp('worker', 'update-popup.js'),
-          readFile(resolve('src', 'useWebWorker', 'worker', 'update-popup.js')),
+          readFile(resolve('src', 'webWorker', 'worker', 'update-popup.js')),
           {
             VERSION_FILE_PATH: correctPath(
               publicPath,
