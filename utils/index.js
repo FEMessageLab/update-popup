@@ -9,7 +9,11 @@ const pupa = require('./pupa')
 exports.join = path.join
 
 /** @type {(...dir: PathLike[]) => PathLike} */
-exports.resolve = (...dir) => path.resolve(__dirname, '..', ...dir)
+const resolve = (...dir) => path.resolve(__dirname, '..', ...dir)
+exports.resolve = resolve
+
+/** @type {(...dir: PathLike[]) => PathLike} */
+exports.resolveApp = (...dir) => resolve('app', ...dir)
 
 // https://webpack.js.org/configuration/entry-context/#entry
 /** @type {(webpackEntry: any | obj, opts: obj) => obj} */
