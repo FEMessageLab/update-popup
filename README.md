@@ -81,19 +81,6 @@ const config = {
 
 使用独立的 publicPath，一般情况下不需要设置此参数。
 
-### options.mode
-
-- Type: `'standalone' | 'webWorker'`
-- Default: `'standalone'`
-
-#### standalone
-
-标准模式。
-
-#### webWorker
-
-使用 [Worker](https://developer.mozilla.org/zh-CN/docs/Web/API/Worker/Worker) 来检查新版本。
-
 [⬆ Back to Top](#table-of-contents)
 
 ### options.inject
