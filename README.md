@@ -21,7 +21,7 @@
 
 ## Introduction
 
-为了促进用户使用最新版本的系统，避免出现已修复的问题。
+![](https://user-images.githubusercontent.com/53422750/88611099-eb654b00-d0ba-11ea-89b9-ca92afc1078c.gif)
 
 [⬆ Back to Top](#table-of-contents)
 
