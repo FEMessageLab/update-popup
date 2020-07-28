@@ -6,7 +6,6 @@
 /**
  * @typedef {{
  *  publicPath?: string
- *  mode?: 'standalone' | 'webWorker'
  *  inject?: boolean
  *  envKey?: string
  *  versionFileName?: string
@@ -36,7 +35,6 @@ class UpdatePopup {
     this.options = Object.assign(
       {
         publicPath: '',
-        mode: 'standalone',
         inject: true, // 自动注入到 webpack.entry
         envKey: 'UPDATE_POPUP_VERSION',
         versionFileName: 'update_popup_version.txt'
@@ -71,52 +69,21 @@ class UpdatePopup {
         _get(this, 'options.publicPath') ||
         _get(compiler, 'options.output.publicPath', '')
 
-      if (this.options.mode === 'standalone') {
-        this.generateFile(
-          resolveApp('main.js'),
-          readFile(resolve('src', 'standalone', 'main.js')),
-          {
-            VERSION_FILE_PATH: correctPath(
-              publicPath,
-              this.options.versionFileName
-            )
-          }
-        )
-      }
-
-      if (this.options.mode === 'webWorker') {
-        this.generateFile(
-          resolveApp('main.js'),
-          readFile(resolve('src', 'webWorker', 'main.js')),
-          {
-            WORKER_FILE_PATH: correctPath(
-              publicPath,
-              'worker',
-              'update-popup.js'
-            )
-          }
-        )
-
-        this.generateFile(
-          resolveApp('worker', 'update-popup.js'),
-          readFile(resolve('src', 'webWorker', 'worker', 'update-popup.js')),
-          {
-            VERSION_FILE_PATH: correctPath(
-              publicPath,
-              this.options.versionFileName
-            )
-          }
-        )
-      }
+      this.generateFile(
+        resolveApp('main.js'),
+        readFile(resolve('src', 'main.js')),
+        {
+          VERSION_FILE_PATH: correctPath(
+            publicPath,
+            this.options.versionFileName
+          )
+        }
+      )
     })
 
     // 复制文件到 webpack 输出目录
     compiler.hooks.done.tap(NAME, () => {
       const outputPath = _get(compiler, 'outputPath', '')
-
-      if (this.options.mode === 'webWorker') {
-        fs.copySync(resolveApp('worker'), join(outputPath, 'worker'))
-      }
 
       // 版本号文件
       fs.outputFileSync(
