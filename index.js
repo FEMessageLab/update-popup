@@ -19,11 +19,10 @@ const {
   replaceStr,
   correctPath,
   resolve,
-  join
+  join,
+  resolveApp
 } = require('./utils')
 
-/** @type {(...dir: PathLike[]) => PathLike} */
-const resolveApp = (...dir) => resolve('app', ...dir)
 /** @type {(filePath: PathLike) => string} */
 const readFile = filePath => fs.readFileSync(filePath, 'utf8')
 
