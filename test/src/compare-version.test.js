@@ -1,6 +1,6 @@
 /// <reference types="jest" />
 
-import {compareVersion} from '../../src/utils'
+import {compareVersion} from '../../src/main'
 
 const currentVersion = '1.1.0'
 
